@@ -7,11 +7,12 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Post from './pages/Post'
 import CreatePost from './pages/CreatePost'
+import Layout from './components/Layout'
 
 
 function App() {
   return (
-    <>
+    <Layout>
       <Header />
       <Switch>
         <Route path="/login">
@@ -30,7 +31,7 @@ function App() {
           <Home />
         </Route>
       </Switch>
-    </>
+    </Layout>
   )
 }
 

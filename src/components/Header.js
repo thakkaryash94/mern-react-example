@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Link, useHistory } from 'react-router-dom'
 import { Box, Heading, Flex, Button } from "@chakra-ui/react"
 import { useCookies } from 'react-cookie'
+import { AppContext } from "./AppContext"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const Header = props => {
@@ -10,17 +11,19 @@ const Header = props => {
   const handleToggle = () => setShow(!show)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  const { state, dispatch } = useContext(AppContext)
 
   useEffect(() => {
-    if (cookies.token) {
+    if (state.user) {
       setIsLoggedIn(true)
     } else {
       setIsLoggedIn(false)
     }
-  }, [cookies, isLoggedIn])
+  }, [state, isLoggedIn])
 
   const handleLogout = () => {
     removeCookie('token')
+    dispatch({ type: 'SET_USER', data: undefined })
     setTimeout(() => {
       history.push('/')
     }, 500)
@@ -44,7 +47,7 @@ const Header = props => {
         </Heading>
         </Flex>
       </Link>
-      <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
+      <Box display={{ md: "none" }} onClick={handleToggle}>
         <svg
           fill="white"
           width="12px"
@@ -66,35 +69,43 @@ const Header = props => {
             Home
         </Button>
         </Link>
-        <Link to='/post/create'>
-          <Button colorScheme="teal" mt={{ base: 4, md: 0 }} mr={2} display="block">
-            New Post
-        </Button>
-        </Link>
+        {isLoggedIn &&
+          <Link to='/post/create'>
+            <Button colorScheme="teal" mt={{ base: 4, md: 0 }} mr={2} display="block">
+              Create
+            </Button>
+          </Link>}
       </Box>
 
-      <Box
-        display={{ sm: show ? "block" : "none", md: "block" }}
-        mt={{ base: 4, md: 0 }}>
-        {isLoggedIn ?
+      {isLoggedIn ?
+        <Box
+          display={{ sm: show ? "block" : "none", md: "flex" }}
+          width={{ sm: "full", md: "auto" }}
+          mt={{ base: 4, md: 0 }}>
           <Button colorScheme="teal" onClick={handleLogout}>
             Log Out
-          </Button> :
-          <>
+          </Button>
+        </Box>
+        :
+        <>
+          <Box display={{ sm: show ? "block" : "none", md: "flex" }}
+            width={{ sm: "full", md: "auto" }}>
             <Link to='/signup'>
               <Button bg="transparent" border="1px" mr={4}>
                 Create account
-              </Button>
+            </Button>
             </Link>
+          </Box>
+          <Box display={{ sm: show ? "block" : "none", md: "flex" }}
+            width={{ sm: "full", md: "auto" }}>
             <Link to='/login'>
               <Button colorScheme="teal">
                 Log In
-            </Button>
+              </Button>
             </Link>
-          </>
-        }
-      </Box>
-
+          </Box>
+        </>
+      }
     </Flex>
   )
 }

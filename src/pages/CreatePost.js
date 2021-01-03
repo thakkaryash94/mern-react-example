@@ -3,10 +3,12 @@ import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Textarea, us
 import { useMutation } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
 import { CREATE_POST } from '../graphql'
+import { useCookies } from 'react-cookie'
 
 export default function CreatePost() {
   const [formValue, setFormValue] = useState({})
   const history = useHistory()
+  const [cookies] = useCookies(['token'])
 
   const toast = useToast()
   const [createPostMutation] = useMutation(CREATE_POST)
@@ -40,7 +42,7 @@ export default function CreatePost() {
     })
   }
 
-  return (
+  return cookies.token ?
     <Flex width="full" align="center" justifyContent="center">
       <Box mt={12} p={8} width="80%" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
@@ -63,5 +65,12 @@ export default function CreatePost() {
         </Box>
       </Box>
     </Flex>
-  )
+    :
+    <Flex width="full" align="center" justifyContent="center">
+      <Box mt={12} p={8} width="80%" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign="center">
+        <Heading>
+          Sorry, You are not authorized
+        </Heading>
+      </Box>
+    </Flex>
 }

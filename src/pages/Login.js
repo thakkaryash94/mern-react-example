@@ -1,45 +1,55 @@
 import React, { useState } from 'react'
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, useToast } from '@chakra-ui/react'
-import { useMutation } from '@apollo/client'
-import Cookies from 'js-cookie'
+import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
-import { SIGN_IN } from '../graphql'
+import { SIGN_IN, } from '../graphql'
+import { useCookies } from 'react-cookie'
 
 export default function Login() {
   const [formValue, setFormValue] = useState({})
   const history = useHistory()
+  const [cookies, setCookie] = useCookies(['token'])
 
   const toast = useToast()
-  const [signInMutation] = useMutation(SIGN_IN)
+  const client = useApolloClient()
 
   const handleChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value })
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    signInMutation({
-      variables: {
-        data: formValue
-      }
-    }).then(response => {
-      if (response.data.signIn.success) {
-        Cookies.set('token', response.data.signIn.token)
+    try {
+      const signInResponse = await client.mutate({
+        mutation: SIGN_IN,
+        variables: {
+          data: formValue
+        }
+      })
+      if (signInResponse.data.signIn.success) {
+        setCookie('token', signInResponse.data.signIn.token)
         toast({
-          title: response.data.signIn.message,
+          title: signInResponse.data.signIn.message,
           status: "success",
           duration: 3000,
         })
         history.push('/')
       } else {
         toast({
-          title: response.data.signIn.message,
+          title: signInResponse.data.signIn.message,
           status: "error",
           duration: 5000,
           isClosable: true,
         })
       }
-    })
+    } catch (error) {
+      toast({
+        title: error.message || 'Something went wrong',
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   }
 
   return (

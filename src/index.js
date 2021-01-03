@@ -6,6 +6,7 @@ import { CookiesProvider } from 'react-cookie'
 import { BrowserRouter as Router } from "react-router-dom"
 import App from './App';
 import './index.css';
+import { AppProvider } from './components/AppContext'
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import client from './client'
@@ -22,16 +23,18 @@ theme.breakpoints = breakpoints
 ReactDOM.render(
   <StrictMode>
     <ColorModeScript />
-    <ChakraProvider theme={theme}>
-      <CSSReset />
-      <ApolloProvider client={client}>
-        <CookiesProvider>
-          <Router>
-            <App />
-          </Router>
-        </CookiesProvider>
-      </ApolloProvider>
-    </ChakraProvider>
+    <AppProvider>
+      <ChakraProvider theme={theme}>
+        <CSSReset />
+        <ApolloProvider client={client}>
+          <CookiesProvider>
+            <Router>
+              <App />
+            </Router>
+          </CookiesProvider>
+        </ApolloProvider>
+      </ChakraProvider>
+    </AppProvider>
   </StrictMode>,
   document.getElementById('root')
 );

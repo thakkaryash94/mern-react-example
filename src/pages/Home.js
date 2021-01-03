@@ -13,9 +13,8 @@ export default function Home() {
       offset: 0,
       limit: 10
     },
+    notifyOnNetworkStatusChange: true
   })
-
-  console.log({ postsData })
 
   useEffect(() => {
     if (postsData && postsData.posts.length > 0) {
@@ -41,20 +40,19 @@ export default function Home() {
     })
   }, [postFetchMore, postsData])
 
-
-
   return (
     <Box p="8">
       <List>
-        {postLoading ?
-          <Box p={4} color="white">
+        {postLoading &&
+          <Box p={4}>
             Loading
-        </Box> :
-          postsData.posts.length > 0 ? postsData.posts.map(post => (
-            <PostItem key={post.id} post={post} />
-          )) :
-            <span>No Posts found</span>
-        }
+        </Box>}
+        {postsData && postsData.posts.length > 0 && postsData.posts.map(post => (
+          <PostItem key={post.id} post={post} />
+        ))}
+        {postsData && postsData.posts.length === 0 &&
+          <span>No Posts found</span>}
+        <br />
         <Button
           isLoading={isLoading}
           loadingText="Show More"

@@ -30,7 +30,6 @@ const client = new ApolloClient({
       },
     },
   }),
-  credentials: 'include'
 })
 
 export default client
