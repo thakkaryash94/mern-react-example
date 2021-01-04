@@ -23,6 +23,9 @@ query post($where: PostWhereUniqueInput!) {
     title
     content
     likes
+    author {
+      id
+    }
   }
 }`
 

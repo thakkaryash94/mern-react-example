@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Post from './pages/Post'
+import EditPost from './pages/EditPost'
 import CreatePost from './pages/CreatePost'
 import Layout from './components/Layout'
 
@@ -15,14 +16,17 @@ function App() {
     <Layout>
       <Header />
       <Switch>
-        <Route path="/login">
+        <Route exact path="/login">
           <Login />
         </Route>
-        <Route path="/signup">
+        <Route exact path="/signup">
           <Signup />
         </Route>
-        <Route path="/post/create">
+        <Route exact path="/post/create">
           <CreatePost />
+        </Route>
+        <Route exact path="/post/edit/:id">
+          <EditPost />
         </Route>
         <Route path="/post/:id">
           <Post />
