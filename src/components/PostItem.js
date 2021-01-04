@@ -10,7 +10,8 @@ export default function PostItem({ post }) {
 
   const [likePostMutation] = useMutation(LIKE_POST)
 
-  const handleLikeButtonClick = () => {
+  const handleLikeButtonClick = (e) => {
+    e.preventDefault()
     likePostMutation({
       variables: {
         where: {

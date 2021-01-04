@@ -19,6 +19,7 @@ export default function Post() {
     },
     fetchPolicy: 'cache-and-network'
   })
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
@@ -30,18 +31,23 @@ export default function Post() {
       <Flex width="full" align="center" justifyContent="center">
         <Box mt={12} p={8} width="80%" borderWidth={1} borderRadius={8} boxShadow="lg">
           {loading ? <>Loading...</> :
-            <><Heading textAlign="center">
-              {postData.post.title}
-            </Heading>
-              <Box mt={6}>
-                {state.user && state.user.id === postData.post.author.id &&
-                  <Box mb={6}>
-                    <Button size="sm" variant="ghost" onClick={() => history.push(`/post/edit/${postData.post?.id}`)}><FontAwesomeIcon icon={faPen} color="teal" style={{ marginRight: '8px' }} />Edit</Button>
-                    <Button size="sm" variant="ghost" onClick={onOpen}><FontAwesomeIcon icon={faTrash} color="teal" style={{ marginRight: '8px' }} />Delete</Button>
-                  </Box>}
-                <div>{postData.post.content}</div>
-              </Box>
-            </>
+            postData && postData.post ?
+              <><Heading textAlign="center">
+                {postData.post.title}
+              </Heading>
+                <Box mt={6}>
+                  {state.user && state.user.id === postData.post.author.id &&
+                    <Box mb={6}>
+                      <Button size="sm" variant="ghost" onClick={() => history.push(`/post/edit/${postData.post?.id}`)}><FontAwesomeIcon icon={faPen} color="teal" style={{ marginRight: '8px' }} />Edit</Button>
+                      <Button size="sm" variant="ghost" onClick={onOpen}><FontAwesomeIcon icon={faTrash} color="teal" style={{ marginRight: '8px' }} />Delete</Button>
+                    </Box>}
+                  <div>{postData.post.content}</div>
+                </Box>
+              </>
+              :
+              <Heading textAlign="center">
+                Sorry, post not found
+              </Heading>
           }
         </Box>
       </Flex>

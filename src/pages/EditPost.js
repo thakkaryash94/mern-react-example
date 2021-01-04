@@ -18,7 +18,8 @@ export default function EditPost() {
       where: {
         id: params.id
       }
-    }
+    },
+    fetchPolicy: 'cache-and-network'
   })
 
   const toast = useToast()

@@ -69,7 +69,7 @@ export default function CreatePost() {
     <Flex width="full" align="center" justifyContent="center">
       <Box mt={12} p={8} width="80%" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign="center">
         <Heading>
-          Sorry, You are not authorized
+          Sorry, you are not authorized
         </Heading>
       </Box>
     </Flex>
