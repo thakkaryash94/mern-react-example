@@ -4,6 +4,7 @@ import { Box, Button, List } from '@chakra-ui/react'
 
 import { POSTS } from '../graphql'
 import PostItem from '../components/PostItem'
+import { Helmet } from 'react-helmet'
 
 export default function Home() {
   const [showMore, setShowMore] = useState(true)
@@ -41,28 +42,31 @@ export default function Home() {
   }, [postFetchMore, postsData])
 
   return (
-    <Box p="8">
-      <List>
-        {postLoading &&
-          <Box p={4}>
-            Loading
+    <>
+      <Helmet><title>Home | Blogs</title></Helmet>
+      <Box p="8">
+        <List>
+          {postLoading &&
+            <Box p={4}>
+              Loading
         </Box>}
-        {postsData && postsData.posts.length > 0 && postsData.posts.map(post => (
-          <PostItem key={post.id} post={post} />
-        ))}
-        {postsData && postsData.posts.length === 0 &&
-          <span>No Posts found</span>}
-        <br />
-        <Button
-          isLoading={isLoading}
-          loadingText="Show More"
-          disabled={!showMore}
-          colorScheme="teal"
-          size="md"
-          onClick={handleShowMore}>
-          Show More
+          {postsData && postsData.posts.length > 0 && postsData.posts.map(post => (
+            <PostItem key={post.id} post={post} />
+          ))}
+          {postsData && postsData.posts.length === 0 &&
+            <span>No Posts found</span>}
+          <br />
+          <Button
+            isLoading={isLoading}
+            loadingText="Show More"
+            disabled={!showMore}
+            colorScheme="teal"
+            size="md"
+            onClick={handleShowMore}>
+            Show More
         </Button>
-      </List>
-    </Box>
+        </List>
+      </Box>
+    </>
   )
 }

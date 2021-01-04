@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, useToast } from '@chakra-ui/react'
 import { useMutation } from '@apollo/client'
-import Cookies from 'js-cookie'
+import { Helmet } from "react-helmet"
 import { useHistory } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import { SIGN_UP } from '../graphql'
 
 export default function Signup() {
   const [formValue, setFormValue] = useState({})
   const history = useHistory()
+  const [cookies, setCookie] = useCookies(['token'])
 
   const toast = useToast()
   const [signUpMutation] = useMutation(SIGN_UP)
@@ -22,18 +24,18 @@ export default function Signup() {
       variables: {
         data: formValue
       }
-    }).then(response => {
-      if (response.data.signUp.success) {
-        Cookies.set('token', response.data.signUp.token)
+    }).then(signUpResponse => {
+      if (signUpResponse.data.signUp.success) {
+        setCookie('token', signUpResponse.data.signUp.token)
         toast({
-          title: response.data.signUp.message,
+          title: signUpResponse.data.signUp.message,
           status: "success",
           duration: 3000,
         })
         history.push('/')
       } else {
         toast({
-          title: response.data.signUp.message,
+          title: signUpResponse.data.signUp.message,
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -43,27 +45,30 @@ export default function Signup() {
   }
 
   return (
-    <Flex width="full" align="center" justifyContent="center">
-      <Box mt={12} p={8} width="420px" borderWidth={1} borderRadius={8} boxShadow="lg">
-        <Box textAlign="center">
-          <Heading>Sign Up</Heading>
-        </Box>
-        <Box my={4} textAlign="left">
-          <form onSubmit={onSubmit}>
-            <FormControl>
-              <FormLabel>User Name</FormLabel>
-              <Input required name="userName" type="text" placeholder="john.doe" onChange={handleChange} />
-            </FormControl>
-            <FormControl mt={6}>
-              <FormLabel>Password</FormLabel>
-              <Input required name="password" minLength="4" type="password" placeholder="*******" onChange={handleChange} />
-            </FormControl>
-            <Button type="submit" colorScheme="teal" variant="outline" width="full" mt={4}>
-              Sign Up
+    <>
+      <Helmet><title>Sign Up | Blogs</title></Helmet>
+      <Flex width="full" align="center" justifyContent="center">
+        <Box mt={12} p={8} width="420px" borderWidth={1} borderRadius={8} boxShadow="lg">
+          <Box textAlign="center">
+            <Heading>Sign Up</Heading>
+          </Box>
+          <Box my={4} textAlign="left">
+            <form onSubmit={onSubmit}>
+              <FormControl>
+                <FormLabel>User Name</FormLabel>
+                <Input required name="userName" type="text" placeholder="john.doe" onChange={handleChange} />
+              </FormControl>
+              <FormControl mt={6}>
+                <FormLabel>Password</FormLabel>
+                <Input required name="password" minLength="4" type="password" placeholder="*******" onChange={handleChange} />
+              </FormControl>
+              <Button type="submit" colorScheme="teal" variant="outline" width="full" mt={4}>
+                Sign Up
             </Button>
-          </form>
+            </form>
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </Flex>
+    </>
   )
 }

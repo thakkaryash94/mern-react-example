@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from './components/Header'
 import { Switch, Route } from "react-router-dom"
+import { Helmet } from "react-helmet"
 
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -13,29 +14,34 @@ import Layout from './components/Layout'
 
 function App() {
   return (
-    <Layout>
-      <Header />
-      <Switch>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/signup">
-          <Signup />
-        </Route>
-        <Route exact path="/post/create">
-          <CreatePost />
-        </Route>
-        <Route exact path="/post/edit/:id">
-          <EditPost />
-        </Route>
-        <Route path="/post/:id">
-          <Post />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-    </Layout>
+    <>
+      <Helmet>
+        <title>Blogs</title>
+      </Helmet>
+      <Layout>
+        <Header />
+        <Switch>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/signup">
+            <Signup />
+          </Route>
+          <Route exact path="/post/create">
+            <CreatePost />
+          </Route>
+          <Route exact path="/post/edit/:id">
+            <EditPost />
+          </Route>
+          <Route path="/post/:id">
+            <Post />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Layout>
+    </>
   )
 }
 

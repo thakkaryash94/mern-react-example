@@ -4,6 +4,7 @@ import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
 import { SIGN_IN, } from '../graphql'
 import { useCookies } from 'react-cookie'
+import { Helmet } from 'react-helmet'
 
 export default function Login() {
   const [formValue, setFormValue] = useState({})
@@ -53,27 +54,30 @@ export default function Login() {
   }
 
   return (
-    <Flex width="full" align="center" justifyContent="center">
-      <Box mt={12} p={8} width="420px" borderWidth={1} borderRadius={8} boxShadow="lg">
-        <Box textAlign="center">
-          <Heading>Login</Heading>
-        </Box>
-        <Box my={4} textAlign="left">
-          <form onSubmit={onSubmit}>
-            <FormControl>
-              <FormLabel>User Name</FormLabel>
-              <Input required name="userName" type="text" placeholder="john.doe" onChange={handleChange} />
-            </FormControl>
-            <FormControl mt={6}>
-              <FormLabel>Password</FormLabel>
-              <Input required name="password" minLength="4" type="password" placeholder="*******" onChange={handleChange} />
-            </FormControl>
-            <Button type="submit" colorScheme="teal" variant="outline" width="full" mt={4}>
-              Sign In
+    <>
+      <Helmet><title>Log In | Blogs</title></Helmet>
+      <Flex width="full" align="center" justifyContent="center">
+        <Box mt={12} p={8} width="420px" borderWidth={1} borderRadius={8} boxShadow="lg">
+          <Box textAlign="center">
+            <Heading>Login</Heading>
+          </Box>
+          <Box my={4} textAlign="left">
+            <form onSubmit={onSubmit}>
+              <FormControl>
+                <FormLabel>User Name</FormLabel>
+                <Input required name="userName" type="text" placeholder="john.doe" onChange={handleChange} />
+              </FormControl>
+              <FormControl mt={6}>
+                <FormLabel>Password</FormLabel>
+                <Input required name="password" minLength="4" type="password" placeholder="*******" onChange={handleChange} />
+              </FormControl>
+              <Button type="submit" colorScheme="teal" variant="outline" width="full" mt={4}>
+                Sign In
             </Button>
-          </form>
+            </form>
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </Flex>
+    </>
   )
 }
