@@ -1,6 +1,6 @@
 import React from 'react'
 import { useMutation } from '@apollo/client'
-import { Box, Button, ListItem } from '@chakra-ui/react'
+import { Box, Button, ListItem, useToast } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,7 @@ import { LIKE_POST } from '../graphql'
 export default function PostItem({ post }) {
 
   const [likePostMutation] = useMutation(LIKE_POST)
+  const toast = useToast()
 
   const handleLikeButtonClick = (e) => {
     e.preventDefault()
@@ -18,6 +19,28 @@ export default function PostItem({ post }) {
           id: post.id
         }
       }
+    }).then(response => {
+      if (response.data.likePost.success) {
+        toast({
+          title: response.data.likePost.message,
+          status: "success",
+          duration: 3000,
+        })
+      } else {
+        toast({
+          title: response.data.likePost.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }).catch(error => {
+      toast({
+        title: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
     })
   }
 
